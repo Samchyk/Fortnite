@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Fortnite/static/css/main.7acaea2f.css",
+    "main.js": "/Fortnite/static/js/main.ac592206.js",
+    "index.html": "/Fortnite/index.html",
+    "main.7acaea2f.css.map": "/Fortnite/static/css/main.7acaea2f.css.map",
+    "main.ac592206.js.map": "/Fortnite/static/js/main.ac592206.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7acaea2f.css",
+    "static/js/main.ac592206.js"
+  ]
+}
