@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Loader from './Loader/Loader';
-import './index.css'
-
+import './index.css';
 
 function App() {
   const [cosmetics, setCosmetics] = useState([]);
@@ -10,14 +9,14 @@ function App() {
   const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(20);
+  const [itemsPerPage] = useState(10);
 
   useEffect(() => {
     setIsLoading(true);
     axios
       .get('https://fortnite-api.com/v2/cosmetics/br')
       .then(response => {
-        setCosmetics(response.data.item);
+        setCosmetics(response.data.data);
         setIsLoading(false);
       })
       .catch(error => {
@@ -31,7 +30,7 @@ function App() {
     axios
       .get(`https://fortnite-api.com/v2/cosmetics/br/${id}`)
       .then(response => {
-        setSelectedCosmetic(response.data.item);
+        setSelectedCosmetic(response.data.data);
         setIsLoading(false);
       })
       .catch(error => {
@@ -40,41 +39,71 @@ function App() {
       });
   };
 
-  const filteredCosmetics = cosmetics.filter(cosmetic =>
-    cosmetic.name.toLowerCase().includes(search.toLowerCase())
-  );
-
+  const filteredCosmetics =
+    cosmetics &&
+    cosmetics.filter(cosmetic =>
+      cosmetic.name.toLowerCase().includes(search.toLowerCase())
+    );
 
   // Пагинация.//////
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredCosmetics.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
+  const currentItems =
+    filteredCosmetics &&
+    filteredCosmetics.slice(indexOfFirstItem, indexOfLastItem);
 
-  const pageNumbers = [];
+  const visiblePages = 10; 
+
+  let pageNumbers = [];
   for (
     let i = 1;
-    i <= Math.ceil(filteredCosmetics.length / itemsPerPage);
+    i <=
+    Math.ceil((filteredCosmetics && filteredCosmetics.length) / itemsPerPage);
     i++
   ) {
     pageNumbers.push(i);
   }
 
-  const renderPageNumbers = pageNumbers.map(number => {
-    return (
-      <li
-        key={number}
-        id={number}
-        onClick={e => setCurrentPage(Number(e.target.id))}
-        className={currentPage === number ? 'active' : ''}
-      >
-        {number}
-      </li>
+  let renderPageNumbers = null;
+
+  if (pageNumbers.length > 0) {
+    let firstPageToShow = currentPage - Math.floor(visiblePages / 2);
+    let lastPageToShow = currentPage + Math.floor(visiblePages / 2);
+
+    if (firstPageToShow < 1) {
+      firstPageToShow = 1;
+      lastPageToShow = visiblePages;
+    } else if (lastPageToShow > pageNumbers.length) {
+      lastPageToShow = pageNumbers.length;
+      firstPageToShow = lastPageToShow - visiblePages + 1;
+    }
+
+    pageNumbers = pageNumbers.slice(firstPageToShow - 1, lastPageToShow);
+
+    renderPageNumbers = (
+      <ul id="page-numbers">
+        {currentPage > 1 && (
+          <li onClick={() => setCurrentPage(currentPage - 1)}>&lt;</li>
+        )}
+        {pageNumbers.map(number => {
+          return (
+            <li
+              key={number}
+              id={number}
+              onClick={e => setCurrentPage(Number(e.target.id))}
+              className={currentPage === number ? 'active' : ''}
+            >
+              {number}
+            </li>
+          );
+        })}
+        {currentPage < pageNumbers.length && (
+          <li onClick={() => setCurrentPage(currentPage + 1)}>&gt;</li>
+        )}
+      </ul>
     );
-  });
+  }
 
   /////////////////////////////
 
@@ -91,15 +120,16 @@ function App() {
       {!isLoading && (
         <>
           <ul>
-            {currentItems.map(cosmetic => (
-              <li
-                key={cosmetic.id}
-                onClick={() => handleItemClick(cosmetic.id)}
-              >
-                <img src={cosmetic.images.icon} alt={cosmetic.name} />
-                {cosmetic.name}
-              </li>
-            ))}
+            {currentItems &&
+              currentItems.map(cosmetic => (
+                <li
+                  key={cosmetic.id}
+                  onClick={() => handleItemClick(cosmetic.id)}
+                >
+                  <img src={cosmetic.images.icon} alt={cosmetic.name} />
+                  {cosmetic.name}
+                </li>
+              ))}
           </ul>
           <ul id="page-numbers">{renderPageNumbers}</ul>
         </>
