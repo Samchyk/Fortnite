@@ -1,3 +1,14 @@
+.title {
+	text-align: center;
+	padding: 8px;
+  margin: 0;
+	border-radius: 8px;
+	font-size: 46px;
+	font-weight: 700;
+
+
+}
+
 ul#page-numbers {
   display: flex;
   list-style: none;
@@ -16,3 +27,7 @@ ul#page-numbers li.active {
   background-color: #007bff;
   color: #fff;
 }
+
+
+
+

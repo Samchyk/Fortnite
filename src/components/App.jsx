@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Container from './Container/Container';
+import Cosmetics from './Cosmetics/cosmetics';
+import SelectedCosmetic from './SelectCosmetic/SelectCosmetic';
+import Search from './Search/Search';
 import Loader from './Loader/Loader';
 import './index.css';
 
@@ -9,9 +13,10 @@ function App() {
   const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+  const [itemsPerPage] = useState(20);
 
   useEffect(() => {
+
     setIsLoading(true);
     axios
       .get('https://fortnite-api.com/v2/cosmetics/br')
@@ -108,44 +113,23 @@ function App() {
   /////////////////////////////
 
   return (
-    <div className="container">
-      <h1>Cosmetics List</h1>
-      <input
-        type="text"
-        placeholder="Search..."
-        value={search}
-        onChange={e => setSearch(e.target.value)}
-      />
+    <Container>
+      <h1 className='title'>Cosmetics List</h1>
+      <Search search={search} setSearch={setSearch} />
       {isLoading && <Loader />}
       {!isLoading && (
         <>
-          <ul>
-            {currentItems &&
-              currentItems.map(cosmetic => (
-                <li
-                  key={cosmetic.id}
-                  onClick={() => handleItemClick(cosmetic.id)}
-                >
-                  <img src={cosmetic.images.icon} alt={cosmetic.name} />
-                  {cosmetic.name}
-                </li>
-              ))}
-          </ul>
+          <Cosmetics
+            cosmetics={currentItems}
+            handleItemClick={handleItemClick}
+          />
           <ul id="page-numbers">{renderPageNumbers}</ul>
         </>
       )}
-      {selectedCosmetic && (
-        <div>
-          <h2>{selectedCosmetic.name}</h2>
-          <img
-            src={selectedCosmetic.images.featured}
-            alt={selectedCosmetic.name}
-          />
-          <p>{selectedCosmetic.description}</p>
-        </div>
-      )}
-    </div>
+      <SelectedCosmetic selectedCosmetic={selectedCosmetic} />
+    </Container>
   );
 }
 
 export default App;
+
