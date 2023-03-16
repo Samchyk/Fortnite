@@ -16,5 +16,6 @@ export const searchCosmeticByName = (name) => {
 export const loadCosmeticItem = (id) => {
   return axios
     .get(`https://fortnite-api.com/v2/cosmetics/br/${id}`)
-    .then(response =>  response.data)
+    .then(response => response.data)
 }
+console.log(loadCosmeticItem);
