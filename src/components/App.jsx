@@ -13,7 +13,7 @@ function App() {
   const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(20);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   useEffect(() => {
 
@@ -49,6 +49,8 @@ function App() {
     cosmetics.filter(cosmetic =>
       cosmetic.name.toLowerCase().includes(search.toLowerCase())
     );
+  
+  
 
   // Пагинация.//////
 
@@ -114,8 +116,18 @@ function App() {
 
   return (
     <Container>
-      <h1 className='title'>Cosmetics List</h1>
+      <h1 className="title">Cosmetics List</h1>
       <Search search={search} setSearch={setSearch} />
+      <select
+        value={itemsPerPage}
+        onChange={e => setItemsPerPage(Number(e.target.value))}
+      >
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="30">30</option>
+        <option value="40">40</option>
+        <option value="50">50</option>
+      </select>
       {isLoading && <Loader />}
       {!isLoading && (
         <>
