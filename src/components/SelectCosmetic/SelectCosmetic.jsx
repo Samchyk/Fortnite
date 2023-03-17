@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Loader from '../Loader/Loader';
+import Container from 'components/Container/Container';
 import { loadCosmeticItem } from '../../utils/api';
+import s from './SelectCosmetic.module.css' 
+import { Link } from 'react-router-dom';
 
 function SelectedCosmetic() {
   const { id } = useParams();
@@ -30,13 +33,38 @@ function SelectedCosmetic() {
   }
 
   return (
-    <div>
-      <h2>{selectedCosmetic.name}</h2>
-      <img src={selectedCosmetic.images.icon} alt={selectedCosmetic.name} />
-      <p>{selectedCosmetic.description}</p>
-      <p>{selectedCosmetic.type.value}</p>
-      <p>{selectedCosmetic.rarity.value}</p>
-    </div>
+    <Container>
+      <button className={s.Button}>
+        <Link className={s.link} to="/">Back to list</Link>
+      </button>
+
+      <div className={s.Cosmetic}>
+        <img src={selectedCosmetic.images.icon} alt={selectedCosmetic.name} />
+        <div className={s.Info}>
+          <h2 className={s.title}>{selectedCosmetic.name}</h2>
+          <p className={s.text}>
+            <b>Description: </b>
+            {selectedCosmetic.description}
+          </p>
+          <p className={s.text}>
+            <b>Type: </b>
+            {selectedCosmetic.type.value}
+          </p>
+          <p className={s.text}>
+            <b>Rarity: </b>
+            {selectedCosmetic.rarity.value}
+          </p>
+          {/* <p className={s.text}>
+            <b>Series:</b>
+            {selectedCosmetic.series.value}
+          </p> */}
+          <p className={s.text}>
+            <b>Set: </b>
+            {selectedCosmetic.set.value}
+          </p>
+        </div>
+      </div>
+    </Container>
   );
 }
 

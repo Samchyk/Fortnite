@@ -25,6 +25,7 @@ function List() {
 
   useEffect(() => {
     setIsLoading(true);
+
     const request = search?.length
       ? searchCosmeticByName(search)
       : loadAllCosmetic();
@@ -38,6 +39,8 @@ function List() {
         setIsLoading(false);
       });
   }, [search]);
+
+  
 
    useEffect(() => {
      const paginated = getPaginationItems(cosmetics, currentPage, itemsPerPage);
