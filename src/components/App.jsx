@@ -6,7 +6,7 @@ import { Routes, Route } from 'react-router-dom';
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<List />} />
+      <Route path="/" element={<List/>} />
       <Route path="/:id" element={<SelectedCosmetic />} />
     </Routes>
   );
